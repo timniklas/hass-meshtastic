@@ -1,2 +1,1 @@
-# hass-meshtastic
-Home Assistant Meshtastic Lights integration
+# WORK IN PROGRESS
