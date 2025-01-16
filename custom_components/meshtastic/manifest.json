@@ -1,0 +1,11 @@
+{
+    "domain": "meshtastic",
+    "name": "Meshtastic",
+    "codeowners": ["@timniklas"],
+    "config_flow": true,
+    "documentation": "https://github.com/timniklas/hass-meshtastic",
+    "iot_class": "local_polling",
+    "issue_tracker": "https://github.com/timniklas/hass-meshtastic/issues",
+    "requirements": ["meshtastic"],
+    "version": "0.0.0"
+}
