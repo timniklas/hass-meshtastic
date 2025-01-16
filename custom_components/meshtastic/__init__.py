@@ -15,7 +15,7 @@ from .const import DOMAIN
 import logging
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[Platform] = [Platform.LIGHT]
+PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 @dataclass
 class RuntimeData:
