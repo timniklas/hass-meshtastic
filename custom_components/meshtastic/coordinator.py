@@ -32,6 +32,8 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
         self.device_address = config_entry.data[CONF_ADDRESS]
         self.device_type = config_entry.data[CONF_TYPE]
 
+        self.connected = False
+        
         # Initialise DataUpdateCoordinator
         super().__init__(
             hass,
@@ -48,6 +50,7 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
         match(self.device_type):
           case 'tcp':
             iface = meshtastic.tcp_interface.TCPInterface(hostname=self.device_address)
+            self.connected = True
             return MeshtasticApiData(
                 nodes=iface.nodes
             )
