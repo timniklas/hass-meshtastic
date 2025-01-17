@@ -38,6 +38,8 @@ async def async_setup_entry(
 
 class NodeTracker(CoordinatorEntity, TrackerEntity):
     
+    _attr_has_entity_name = True
+
     def __init__(self, coordinator: MeshtasticCoordinator, deviceinfo: DeviceInfo, device_id: str) -> None:
         super().__init__(coordinator)
         self.device_info = deviceinfo
