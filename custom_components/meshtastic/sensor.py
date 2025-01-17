@@ -50,17 +50,19 @@ async def async_setup_entry(
             ), device_id=device_id, data_key="batteryLevel", device_class=SensorDeviceClass.BATTERY, unit=PERCENTAGE),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="voltage", device_class=SensorDeviceClass.VOLTAGE, unit=UnitOfElectricPotential.VOLT),
+            ), device_id=device_id, data_key="voltage", device_class=SensorDeviceClass.VOLTAGE, category=EntityCategory.DIAGNOSTIC, unit=UnitOfElectricPotential.VOLT),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="channelUtilization", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE),
+            ), device_id=device_id, data_key="channelUtilization", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="airUtilTx", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE)
+            ), device_id=device_id, data_key="airUtilTx", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False)
         ])
 
 class MetricsSensor(CoordinatorEntity):
     
+    _attr_has_entity_name = True
+
     def __init__(self,
     coordinator: MeshtasticCoordinator,
     deviceinfo: DeviceInfo,
@@ -69,7 +71,6 @@ class MetricsSensor(CoordinatorEntity):
     unit: str = None,
     device_class: str = None,
     category: str = None,
-    icon: str = None,
     visible: bool = True) -> None:
         super().__init__(coordinator)
         self.device_info = deviceinfo
@@ -82,8 +83,6 @@ class MetricsSensor(CoordinatorEntity):
             self._attr_unit_of_measurement = unit
         if device_class is not None:
             self._attr_device_class = device_class
-        if icon is not None:
-            self._attr_icon = icon
         if category is not None:
             self._attr_entity_category = category
 
