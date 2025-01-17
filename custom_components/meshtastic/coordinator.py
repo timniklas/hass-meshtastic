@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import timedelta
+from functools import partial
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_ADDRESS, CONF_TYPE
@@ -23,7 +24,7 @@ class MeshtasticApiData:
 class MeshtasticCoordinator(DataUpdateCoordinator):
     """My coordinator."""
 
-    data: GoveeApiData
+    data: MeshtasticApiData
 
     def __init__(self, hass: HomeAssistant, config_entry: ConfigEntry) -> None:
         """Initialize coordinator."""
@@ -45,20 +46,24 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
             # You can remove this line but left here for explanatory purposes.
             update_interval=timedelta(seconds=30)
         )
+        self.hass = hass
 
-    def _get_data(self):
+    async def _async_get_data(self):
         match(self.device_type):
-          case 'tcp':
-            iface = meshtastic.tcp_interface.TCPInterface(hostname=self.device_address)
-            self.connected = True
-            return MeshtasticApiData(
-                nodes=iface.nodes
-            )
-          case _:
-            raise Exception("unknown device type")
+            case 'tcp':
+                f_kwargs = {'hostname': self.device_address}
+                iface = await self.hass.async_add_executor_job(
+                    partial(meshtastic.tcp_interface.TCPInterface, **f_kwargs)
+                )
+                self.connected = True
+                return MeshtasticApiData(
+                    nodes=iface.nodes
+                )
+            case _:
+                raise Exception("unknown device type")
 
     async def _async_push_data(self):
-        self.async_set_updated_data(self._get_data())
+        self.async_set_updated_data(await self._async_get_data())
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
@@ -66,4 +71,4 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
         This is the place to pre-process the data to lookup tables
         so entities can quickly look up their data.
         """
-        return self._get_data()
+        return await self._async_get_data()
