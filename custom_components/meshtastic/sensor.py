@@ -47,16 +47,16 @@ async def async_setup_entry(
                 model=hwModel,
                 serial_number=macaddr,
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="batteryLevel", device_class=SensorDeviceClass.BATTERY, unit=PERCENTAGE),
+            ), device_id=device_id, data_key="batteryLevel", translation="battery", device_class=SensorDeviceClass.BATTERY, unit=PERCENTAGE),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="voltage", device_class=SensorDeviceClass.VOLTAGE, category=EntityCategory.DIAGNOSTIC, unit=UnitOfElectricPotential.VOLT),
+            ), device_id=device_id, data_key="voltage", translation="voltage", device_class=SensorDeviceClass.VOLTAGE, category=EntityCategory.DIAGNOSTIC, unit=UnitOfElectricPotential.VOLT),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="channelUtilization", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False),
+            ), device_id=device_id, data_key="channelUtilization", translation="channel_utilization", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False),
             MetricsSensor(coordinator, DeviceInfo(
                 identifiers={(DOMAIN, coordinator.device_address, device_id)}
-            ), device_id=device_id, data_key="airUtilTx", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False)
+            ), device_id=device_id, data_key="airUtilTx", translation="airtx", category=EntityCategory.DIAGNOSTIC, unit=PERCENTAGE, visible=False)
         ])
 
 class MetricsSensor(CoordinatorEntity):
@@ -68,13 +68,14 @@ class MetricsSensor(CoordinatorEntity):
     deviceinfo: DeviceInfo,
     device_id: str,
     data_key: str,
+    translation: str,
     unit: str = None,
     device_class: str = None,
     category: str = None,
     visible: bool = True) -> None:
         super().__init__(coordinator)
         self.device_info = deviceinfo
-        self.translation_key = f"metrics_{data_key}"
+        self.translation_key = translation
         self.unique_id = f"{coordinator.device_address}_{device_id}_{self.translation_key}"
         self.entity_registry_enabled_default = visible
         self._device_id = device_id
