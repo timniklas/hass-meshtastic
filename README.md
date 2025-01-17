@@ -35,6 +35,11 @@ The Meshtastic Home Assistant Custom Integration allows you to integrate your lo
 |------|------------------|
 |Send private message|yes|
 
+#### Event:
+|Event|Example data|
+|------|------------------|
+|meshtastic_receive_text|{'from': 12345678, 'to': '^ALL', 'message': 'Hello world!'}|
+
 ## Installation
 
 ### HACS (recommended)
