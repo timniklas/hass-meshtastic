@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import timedelta
-from functools import partial
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_ADDRESS, CONF_TYPE
@@ -11,6 +10,7 @@ import meshtastic
 import meshtastic.tcp_interface
 
 from .const import DOMAIN
+from .api import MeshtasticAPI
 
 import logging
 _LOGGER = logging.getLogger(__name__)
@@ -46,18 +46,19 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
             # You can remove this line but left here for explanatory purposes.
             update_interval=timedelta(seconds=30)
         )
-        self.hass = hass
+        self.api = MeshtasticAPI(hass)
+
+    async def sendText(self, destinationId: str, message: str):
+        await self.api.connectTCP(self.device_address)
+        await self.api.sendText(destinationId, message)
 
     async def _async_get_data(self):
         match(self.device_type):
             case 'tcp':
-                f_kwargs = {'hostname': self.device_address}
-                iface = await self.hass.async_add_executor_job(
-                    partial(meshtastic.tcp_interface.TCPInterface, **f_kwargs)
-                )
+                await self.api.connectTCP(self.device_address)
                 self.connected = True
                 return MeshtasticApiData(
-                    nodes=iface.nodes
+                    nodes=self.api.nodes
                 )
             case _:
                 raise Exception("unknown device type")
