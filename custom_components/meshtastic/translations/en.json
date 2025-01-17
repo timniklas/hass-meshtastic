@@ -29,16 +29,16 @@
             }
         },
         "sensor": {
-            "metrics_batteryLevel": {
+            "battery": {
                 "name": "Battery"
             },
-            "metrics_voltage": {
+            "voltage": {
                 "name": "Operating voltage"
             },
-            "metrics_channelUtilization": {
+            "channel_utilization": {
                 "name": "Channel utilization"
             },
-            "metrics_airUtilTx": {
+            "airtx": {
                 "name": "TX utilisation"
             }
         }
