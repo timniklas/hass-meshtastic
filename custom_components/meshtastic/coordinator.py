@@ -1,16 +1,16 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_ADDRESS, CONF_TYPE
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 import meshtastic
 import meshtastic.tcp_interface
 
 from .const import DOMAIN
-from .api import MeshtasticAPI
+from .api import TCPMeshtasticAPI
 
 import logging
 _LOGGER = logging.getLogger(__name__)
@@ -46,25 +46,26 @@ class MeshtasticCoordinator(DataUpdateCoordinator):
             # You can remove this line but left here for explanatory purposes.
             update_interval=timedelta(seconds=30)
         )
-        self.api = MeshtasticAPI(hass)
-
-    async def sendText(self, destinationId: str, message: str):
-        await self.api.connectTCP(self.device_address)
-        await self.api.sendText(destinationId, message)
-
-    async def _async_get_data(self):
         match(self.device_type):
             case 'tcp':
-                await self.api.connectTCP(self.device_address)
-                self.connected = True
-                return MeshtasticApiData(
-                    nodes=self.api.nodes
-                )
+                self.api = TCPMeshtasticAPI(hass, self._async_push_data, self.device_address)
             case _:
                 raise Exception("unknown device type")
 
+    async def sendText(self, destinationId: str, message: str):
+        await self.api.connect()
+        await self.api.sendText(destinationId, message)
+
+    async def _async_get_data(self):
+        await self.api.connect()
+        self.connected = True
+        return MeshtasticApiData(
+            nodes=self.api.nodes
+        )
+
     async def _async_push_data(self):
         self.async_set_updated_data(await self._async_get_data())
+        
 
     async def _async_update_data(self):
         """Fetch data from API endpoint.
