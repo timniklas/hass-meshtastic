@@ -50,14 +50,6 @@ class NotifyNode(CoordinatorEntity, NotifyEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         self.async_write_ha_state()
-    
-    @property
-    def _node(self):
-        return self.coordinator.data.nodes[self._device_id]
-    
-    @property
-    def available(self):
-        return self._device_id in self.coordinator.data.nodes
 
     async def async_send_message(self, message: str, title: str | None = None) -> None:
         """Send a message."""
