@@ -1,0 +1,46 @@
+{
+    "title": "Meshtastic",
+    "config": {
+        "step": {
+            "user": {
+                "title": "Meshtastic Einrichtung",
+                "description": "Bitte wähle eine Verbindungsart.",
+                "menu_options": {
+                    "tcp": "TCP/IP"
+                }
+            },
+            "tcp": {
+                "description": "TCP Verbindungsdetails",
+                "data": {
+                    "address": "IP-Adresse"
+                }
+            }
+        }
+    },
+    "entity": {
+        "notify": {
+            "notify_node": {
+                "name": "Private Nachricht"
+            }
+        },
+        "device_tracker": {
+            "node_tracker": {
+                "name": "Position"
+            }
+        },
+        "sensor": {
+            "metrics_batteryLevel": {
+                "name": "Batterie"
+            },
+            "metrics_voltage": {
+                "name": "Betriebsspannung"
+            },
+            "metrics_channelUtilization": {
+                "name": "Kanelbelegung"
+            },
+            "metrics_airUtilTx": {
+                "name": "Sendeanteil"
+            }
+        }
+    }
+}
