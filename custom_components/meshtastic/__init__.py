@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from enum import IntEnum
 from dataclasses import dataclass
-from homeassistant.components import bluetooth
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
