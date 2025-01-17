@@ -30,7 +30,7 @@ The Meshtastic Home Assistant Custom Integration allows you to integrate your lo
 #### Notify:
 |Notify|Enabled by default|
 |------|------------------|
-|Private message (per node)|yes|
+|Send private message|yes|
 
 ## Installation
 
