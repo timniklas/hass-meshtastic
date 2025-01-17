@@ -11,6 +11,11 @@
 
 The Meshtastic Home Assistant Custom Integration allows you to integrate your local Meshtastic devices with your Home Assistant setup.
 
+### Currently supported connection types
+* TCP/IP
+* Bluetooth (work in progress)
+* Serial (work in progress)
+
 ### Currently supported features
 #### Sensors:
 |Sensor|Unit|Example Value|Enabled by default|
