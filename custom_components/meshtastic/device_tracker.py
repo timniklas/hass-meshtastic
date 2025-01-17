@@ -57,21 +57,19 @@ class NodeTracker(CoordinatorEntity, TrackerEntity):
     
     @property
     def available(self):
-        if self._device_id not in self.coordinator.data.nodes:
-            return False
         return 'position' in self._node
     
     @property
     def latitude(self):
-        if 'latitudeI' not in self._node['position']:
+        if 'latitude' not in self._node['position']:
             return None
-        return self._node['position']['latitudeI']
+        return self._node['position']['latitude']
     
     @property
     def longitude(self):
-        if 'longitudeI' not in self._node['position']:
+        if 'longitude' not in self._node['position']:
             return None
-        return self._node['position']['longitudeI']
+        return self._node['position']['longitude']
     
     @property
     def source_type(self):

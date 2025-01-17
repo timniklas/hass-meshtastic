@@ -97,8 +97,6 @@ class MetricsSensor(CoordinatorEntity):
     
     @property
     def available(self):
-        if self._device_id not in self.coordinator.data.nodes:
-            return False
         return 'deviceMetrics' in self._node
     
     @property
