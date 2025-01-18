@@ -9,7 +9,10 @@
 
 ## Overview
 
-The Meshtastic Home Assistant Custom Integration allows you to integrate your local Meshtastic devices with your Home Assistant setup.
+The Meshtastic Home Assistant Custom Integration allows you to integrate your local Meshtastic devices with your Home Assistant setup. No MQTT required!
+
+![image](https://github.com/user-attachments/assets/3d547e91-768d-454e-9c29-696102565c0e)
+
 
 ### Currently supported connection types
 * TCP/IP
@@ -39,6 +42,7 @@ The Meshtastic Home Assistant Custom Integration allows you to integrate your lo
 |Event|Example data|
 |------|------------------|
 |meshtastic_receive_text|{'from': 12345678, 'to': '^ALL', 'message': 'Hello world!'}|
+
 
 ## Installation
 
