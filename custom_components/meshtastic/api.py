@@ -14,6 +14,7 @@ class MeshtasticAPI:
         self._hass = hass
         self._iface = None
         self._async_updateCallback = async_updateCallback
+        self.connected = False
         pub.subscribe(self._onDisconnect, "meshtastic.connection.lost")
         pub.subscribe(self._onReceiveUpdate, "meshtastic.receive.position")
         pub.subscribe(self._onReceiveUpdate, "meshtastic.receive.user")
@@ -24,14 +25,9 @@ class MeshtasticAPI:
         if self._iface == None:
             return None
         return self._iface.nodes
-
-    @property
-    def connected(self):
-        if self._iface == None or not hasattr(self._iface, 'isConnected'):
-            return False
-        return self._iface.isConnected
     
     def _onDisconnect(self, interface, topic=pub.AUTO_TOPIC):
+        self.connected = False
         _LOGGER.warn("Lost connection, reconnecting")
         asyncio.run_coroutine_threadsafe(
             self.connect(), self._hass.loop
@@ -65,3 +61,4 @@ class TCPMeshtasticAPI(MeshtasticAPI):
         self._iface = await self._hass.async_add_executor_job(
             partial(meshtastic.tcp_interface.TCPInterface, **f_kwargs)
         )
+        self.connected = True
